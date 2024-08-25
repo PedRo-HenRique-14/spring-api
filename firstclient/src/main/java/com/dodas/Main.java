@@ -1,5 +1,7 @@
 package com.dodas;
 
+import java.util.Arrays;
+import java.util.List;
 import java.util.Scanner;
 
 import com.dodas.api.Client;
@@ -17,7 +19,7 @@ public class Main {
         while (run == true) {
             @SuppressWarnings("resource")
             Scanner scanner = new Scanner(System.in);
-            System.out.print("Menu----------\n[1] Registrar usuário\n[2] Lista de usuários\n[3] Sair\n>> ");
+            System.out.print("Menu----------\n[1] Registrar usuário\n[2] Deletar usuário\n[3] Lista de usuários\n[4] Sair\n>> ");
             int r = scanner.nextInt();
             switch (r) {
                 case 1:
@@ -25,9 +27,13 @@ public class Main {
                     break;
                 
                 case 2:
+                    deleteUser();
+                    break;
+                
+                case 3:
                     userList();
                     break;
-            
+
                 default:
                     System.out.println("Saindo...");
                     run = false;
@@ -36,6 +42,7 @@ public class Main {
         }
     }
 
+    
     private static void registerUser() {
         @SuppressWarnings("resource")
         Scanner scanner = new Scanner(System.in);
@@ -47,14 +54,38 @@ public class Main {
         String gender = scanner.nextLine();
         System.out.println("Digite uma profissão: ");
         String profession = scanner.nextLine();
-
+        
         User user = new User();
         user.setName(name);
         user.setAge(age);
         user.setGender(gender);
         user.setProfession(profession);
-
+        
         client.postRequest(user);
+    }
+    
+    private static void deleteUser() {
+        @SuppressWarnings("resource")
+        Scanner scanner = new Scanner(System.in);
+        String name;
+        List<User> users = Arrays.asList(client.getRequest());
+        users.forEach((user) -> {
+            System.out.println("--------------------------------------------");
+            System.out.println(String.format("Nome: %s\nIdade: %s\nGênero: %s\nProfissão: %s", 
+                user.getName(), 
+                user.getAge(), 
+                user.getGender(), 
+                user.getProfession()
+            ));
+            System.out.println("--------------------------------------------");
+        });
+        System.out.println("Digite o nome do usuário que deseja deletar\n>> ");
+        name = scanner.nextLine();
+        if(!client.deleteRequest(name)) {
+            System.out.printf("Ocorreu um erro ao tentar remover o usuário %s.\n", name);
+            return;
+        }
+        System.out.println("Usuário removidos com sucesso!");
     }
 
     private static void userList() {

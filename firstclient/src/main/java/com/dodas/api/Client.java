@@ -1,5 +1,6 @@
 package com.dodas.api;
 
+import java.io.IOException;
 import java.net.ConnectException;
 import java.net.URI;
 import java.net.http.HttpClient;
@@ -54,6 +55,30 @@ public class Client {
         } catch (Exception e) {
             e.printStackTrace();
             return null;
+        }
+    }
+
+    public boolean deleteRequest(String userName) {
+        try {
+            HttpRequest request = HttpRequest.newBuilder().uri(URI.create(String.format("http://%s/response/%s", 
+                Config.getConfigManager().getConfigProp("server.ip"),
+                userName
+            ))).DELETE().build();
+            try {
+                HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
+                if (response.statusCode() == 200) {
+                    return true;
+                } else {
+                    return false;
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
+                return false;
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
         }
     }
 }
