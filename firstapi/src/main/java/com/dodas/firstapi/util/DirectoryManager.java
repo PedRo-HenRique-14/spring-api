@@ -7,7 +7,7 @@ import java.nio.file.Paths;
 
 public class DirectoryManager {
     static DirectoryManager directoryManager;
-    static Path applicationPath = Paths.get(System.getProperty("user.dir"));;
+    static Path absolutePath = Paths.get(System.getProperty("user.dir"));;
 
     public static DirectoryManager getManager() {
         if (directoryManager == null) {
@@ -18,7 +18,7 @@ public class DirectoryManager {
     }
 
     public void createDirectory(String dir) {
-        Path dirPath = applicationPath.resolve(dir);
+        Path dirPath = absolutePath.resolve(dir);
         if (!Files.exists(dirPath)) {
             try {
                 Files.createDirectories(dirPath);
