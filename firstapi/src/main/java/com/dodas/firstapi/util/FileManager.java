@@ -68,7 +68,7 @@ public class FileManager {
     }
 
     @SuppressWarnings("static-access")
-    public void deleteFiles(String dir, String name) {
+    public void deleteFiles(String dir, String uuid) {
         File filesDirPath = new File(Paths.get(dirMan.absolutePath.toString(), dir).toString());
         List<File> allFiles = Arrays.asList(filesDirPath.listFiles());
         
@@ -76,7 +76,7 @@ public class FileManager {
             try(FileReader jsonReader = new FileReader(String.format("%s/%s/%s", dirMan.absolutePath, dir, file.getName()))) {
                 Response res = gson.fromJson(jsonReader, Response.class);
                 jsonReader.close();
-                if (res.getName().toLowerCase().replace(".json", "").equals(name.toLowerCase())) {
+                if (res.getUuid().equals(uuid)) {
                     Files.deleteIfExists(Paths.get(file.getAbsolutePath()));
                 }
             } catch (Exception e) {
