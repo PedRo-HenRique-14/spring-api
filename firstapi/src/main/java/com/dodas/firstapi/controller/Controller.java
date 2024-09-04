@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.dodas.firstapi.dto.RequestDTO;
 import com.dodas.firstapi.dto.ResponseDTO;
 import com.dodas.firstapi.entity.Response;
 import com.dodas.firstapi.util.Config;
@@ -20,8 +21,8 @@ import com.dodas.firstapi.util.FileManager;
 public class Controller {
     
     @PostMapping
-    public void newResponse(@RequestBody Response res) {
-        FileManager.getFileManager().createFile(Config.getConfigManager().getConfigProp("response.directory"), res);
+    public void newResponse(@RequestBody RequestDTO req) {
+        FileManager.getFileManager().createFile(Config.getConfigManager().getConfigProp("response.directory"), new Response(req));
         System.out.println("New request done!");
         return;
     }
@@ -36,10 +37,10 @@ public class Controller {
         return resDTO;
     }
 
-    @DeleteMapping("{name}")
-    public void deleteResponse(@PathVariable("name") String userName) {
+    @DeleteMapping("{uuid}")
+    public void deleteResponse(@PathVariable("uuid") String uuid) {
         String responseDirectory = Config.getConfigManager().getConfigProp("response.directory");
-        FileManager.getFileManager().deleteFiles(responseDirectory, userName);
+        FileManager.getFileManager().deleteFiles(responseDirectory, uuid);
         System.out.println("Arquivos removidos com sucesso!");
     }
 
