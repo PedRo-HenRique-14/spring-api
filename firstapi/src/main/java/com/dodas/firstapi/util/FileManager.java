@@ -35,11 +35,12 @@ public class FileManager {
     @SuppressWarnings("static-access")
     public void createFile(String dir, Response response) {
         Path fileDir = Paths.get(dirMan.absolutePath.toString(), dir);
-        Path filePath = fileDir.resolve(response.getName() + ".json");
+        Path filePath = fileDir.resolve(response.getUuid() + ".json");
         String jsonString = gson.toJson(response);
         try (FileWriter fileWriter = new FileWriter(filePath.toFile())){
 
             fileWriter.write(jsonString);
+            fileWriter.close();
 
         } catch (Exception e) {
 
