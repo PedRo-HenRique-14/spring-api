@@ -20,14 +20,14 @@ import com.dodas.firstapi.util.FileManager;
 @RequestMapping("response")
 public class Controller {
     
-    @PostMapping
+    @PostMapping("create")
     public void newResponse(@RequestBody RequestDTO req) {
         FileManager.getFileManager().createFile(Config.getConfigManager().getConfigProp("response.directory"), new Response(req));
         System.out.println("New request done!");
         return;
     }
 
-    @GetMapping
+    @GetMapping("users")
     public List<ResponseDTO> getAll() {
         System.out.println("New POST done!");
         
@@ -37,7 +37,7 @@ public class Controller {
         return resDTO;
     }
 
-    @DeleteMapping("{uuid}")
+    @DeleteMapping("delete/{uuid}")
     public void deleteResponse(@PathVariable("uuid") String uuid) {
         String responseDirectory = Config.getConfigManager().getConfigProp("response.directory");
         FileManager.getFileManager().deleteFiles(responseDirectory, uuid);
