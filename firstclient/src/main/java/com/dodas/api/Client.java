@@ -19,7 +19,7 @@ public class Client {
         try {
             
             HttpRequest request = HttpRequest.newBuilder()
-                        .uri(URI.create(String.format("http://%s/response", Config.getConfigManager().getConfigProp("server.ip"))))
+                        .uri(URI.create(String.format("http://%s/response/create", Config.getConfigManager().getConfigProp("server.ip"))))
                         .header("Content-Type", "application/json")
                         .POST(HttpRequest.BodyPublishers.ofString(gson.toJson(user)))
                         .build();
@@ -43,7 +43,7 @@ public class Client {
         try {
             
             HttpRequest request = HttpRequest.newBuilder()
-                        .uri(URI.create(String.format("http://%s/response", Config.getConfigManager().getConfigProp("server.ip"))))
+                        .uri(URI.create(String.format("http://%s/response/users", Config.getConfigManager().getConfigProp("server.ip"))))
                         .GET()
                         .build();
             HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
@@ -55,6 +55,31 @@ public class Client {
         } catch (Exception e) {
             e.printStackTrace();
             return null;
+        }
+    }
+
+    public void updateRequest(User user) {
+        try {
+            
+            HttpRequest request = HttpRequest.newBuilder()
+                        .uri(URI.create(String.format("http://%s/response/update/%s", Config.getConfigManager().getConfigProp("server.ip"), user.getUuid())))
+                        .header("Content-Type", "application/json")
+                        .POST(HttpRequest.BodyPublishers.ofString(gson.toJson(user)))
+                        .build();
+            try {
+                    
+                HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
+                if (response.statusCode() == 200) {
+                    System.out.println("Resposta enviada!");
+                    return;
+                }
+                System.out.println("Falha ao enviar resposta...");
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
 

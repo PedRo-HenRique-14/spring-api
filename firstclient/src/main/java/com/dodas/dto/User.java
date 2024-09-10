@@ -1,10 +1,18 @@
 package com.dodas.dto;
 
 public class User {
+    String uuid;
     String name;
     int age;
     String gender;
     String profession;
+    
+    public String getUuid() {
+        return uuid;
+    }
+    public void setUuid(String uuid) {
+        this.uuid = uuid;
+    }
     public String getName() {
         return name;
     }

@@ -19,7 +19,14 @@ public class Main {
         while (run == true) {
             @SuppressWarnings("resource")
             Scanner scanner = new Scanner(System.in);
-            System.out.print("Menu----------\n[1] Registrar usuário\n[2] Deletar usuário\n[3] Lista de usuários\n[4] Sair\n>> ");
+            System.out.print("Menu----------\n"+
+                            "[1] Registrar usuário\n"+
+                            "[2] Atualizar Usuário\n"+
+                            "[3] Deletar usuário\n"+
+                            "[4] Lista de usuários\n"+
+                            "[5] Sair\n"+
+                            ">> "
+            );
             int r = scanner.nextInt();
             switch (r) {
                 case 1:
@@ -27,16 +34,24 @@ public class Main {
                     break;
                 
                 case 2:
-                    deleteUser();
+                    updateUser();
                     break;
                 
                 case 3:
-                    userList();
+                    deleteUser();
+                    break;
+                
+                case 4:
+                    userList(client.getRequest());
+                    break;
+
+                case 5:
+                    System.out.println("Saindo...");
+                    run = false;
                     break;
 
                 default:
-                    System.out.println("Saindo...");
-                    run = false;
+                    System.out.println("Opção inválida!");
                     break;
             }
         }
@@ -63,6 +78,28 @@ public class Main {
         
         client.postRequest(user);
     }
+
+    private static void updateUser() {
+        User[] userList = client.getRequest();
+        userList(userList);
+        System.out.print("Digite o index do usuário que deseja atualizar:\n>> ");
+        
+        @SuppressWarnings("resource")
+        Scanner scanner = new Scanner(System.in);
+        int indexToUpdate = scanner.nextInt();
+        scanner.reset();
+
+        User userToUpdate = userList[--indexToUpdate];
+        System.out.print("Digite o novo nome\n>> ");
+        userToUpdate.setName(scanner.next());
+        System.out.print("Digite a nova idade\n>> ");
+        userToUpdate.setAge(scanner.nextInt());
+        System.out.print("Digite o novo gênero\n>> ");
+        userToUpdate.setGender(scanner.next());
+        System.out.print("Digite a nova profissão\n>> ");
+        userToUpdate.setProfession(scanner.next());
+        client.updateRequest(userToUpdate);
+    }
     
     private static void deleteUser() {
         @SuppressWarnings("resource")
@@ -88,10 +125,10 @@ public class Main {
         System.out.println("Usuário removidos com sucesso!");
     }
 
-    private static void userList() {
-        User[] users = client.getRequest();
+    private static void userList(User[] users) {
+        int index = 0;
         for(User user : users) {
-            System.out.println("--------------------------------------------");
+            System.out.printf("--------------------------------------------\nIndex - %s\n", ++index);
             System.out.println(String.format("Nome: %s\nIdade: %s\nGênero: %s\nProfissão: %s", user.getName(), user.getAge(), user.getGender(), user.getProfession()));
             System.out.println("--------------------------------------------");
         }
