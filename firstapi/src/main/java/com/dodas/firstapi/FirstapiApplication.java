@@ -13,8 +13,8 @@ public class FirstapiApplication {
 	public static void main(String[] args) {
 		SpringApplication.run(FirstapiApplication.class, args);
 		config = Config.getConfigManager();
-		dirMan = DirectoryManager.getManager();
 		config.loadConfig();
+		dirMan = DirectoryManager.getManager();
 		dirMan.createDirectory(config.getConfigProp("response.directory"));
 	}
 

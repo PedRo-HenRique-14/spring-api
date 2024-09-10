@@ -7,7 +7,8 @@ import java.nio.file.Paths;
 
 public class DirectoryManager {
     static DirectoryManager directoryManager;
-    static Path absolutePath = Paths.get(System.getProperty("user.dir"));;
+    static Path absolutePath = Paths.get(System.getProperty("user.dir"));
+    private String filesDirectory = Config.getConfigManager().getConfigProp("response.directory");
 
     public static DirectoryManager getManager() {
         if (directoryManager == null) {
@@ -28,5 +29,9 @@ public class DirectoryManager {
         } else {
             System.out.println(String.format("The directory'%s' exist.", dirPath));
         }
+    }
+
+    public String getFilesDirectory() {
+        return this.filesDirectory;
     }
 }

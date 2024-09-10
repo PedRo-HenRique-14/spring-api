@@ -12,6 +12,8 @@ import java.util.List;
 
 import com.dodas.firstapi.entity.Response;
 import com.google.gson.Gson;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
 
 public class FileManager {
     static FileManager fileManager;
@@ -46,6 +48,30 @@ public class FileManager {
 
             e.printStackTrace();
 
+        }
+    }
+
+    public void updateFile(String uuid, Response res) {
+        File fileToUpdate = getFileByUuid(uuid);
+
+        try {
+            
+            FileReader reader = new FileReader(fileToUpdate.getAbsolutePath());
+            JsonObject jsonObject = JsonParser.parseReader(reader).getAsJsonObject();
+            reader.close();
+
+            jsonObject.addProperty("name", res.getName());
+            jsonObject.addProperty("age", res.getAge());
+            jsonObject.addProperty("gender", res.getGender());
+            jsonObject.addProperty("profession", res.getProfession());
+
+            FileWriter writer = new FileWriter(fileToUpdate.getAbsolutePath());
+            gson.toJson(jsonObject, writer);
+            writer.flush();
+            writer.close();
+
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
 
@@ -84,5 +110,19 @@ public class FileManager {
                 e.printStackTrace();
             }
         });
+    }
+
+    @SuppressWarnings("static-access")
+    private File getFileByUuid(String uuid) {
+        File filesPath = new File(Paths.get(dirMan.absolutePath.toString(), dirMan.getFilesDirectory()).toString());
+        File[] allFiles = filesPath.listFiles();
+
+        for(File file : allFiles) {
+            if (file.getName().replace(".json", "").equals(uuid)) {
+                return file;
+            }
+        }
+
+        return null;
     }
 }

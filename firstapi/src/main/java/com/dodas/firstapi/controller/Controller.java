@@ -27,6 +27,12 @@ public class Controller {
         return;
     }
 
+    @PostMapping("update/{uuid}")
+    public void updateResponse(@PathVariable("uuid") String uuid, @RequestBody RequestDTO req) {
+        FileManager.getFileManager().updateFile(uuid, new Response(req));
+        System.out.println("New request done!");
+    }
+
     @GetMapping("users")
     public List<ResponseDTO> getAll() {
         System.out.println("New POST done!");
